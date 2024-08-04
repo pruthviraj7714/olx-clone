@@ -1,6 +1,10 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -10,11 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { BACKEND_URL } from "@/config/config";
-import axios from "axios";
-import React, { useState } from "react";
 
 const categories = [
   { name: "Electronics", value: "electronics" },
@@ -29,11 +29,56 @@ const Sell = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const { toast } = useToast();
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const removeImage = () => {
+    setImage(null);
+    setImageUrl("");
+  };
+
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post(
+        `http://${BACKEND_URL}/api/v1/product/upload`, // Adjust this URL to your actual upload endpoint
+        formData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data.url;
+    } catch (error) {
+      toast({
+        title: "Image upload failed",
+        description: error.response?.data?.message ?? error.message,
+      });
+      throw error;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let uploadedImageUrl = imageUrl;
+    if (image && !imageUrl) {
+      try {
+        uploadedImageUrl = await uploadImage(image);
+        setImageUrl(uploadedImageUrl);
+      } catch (error) {
+        return;
+      }
+    }
 
     try {
       const res = await axios.post(
@@ -41,9 +86,9 @@ const Sell = () => {
         {
           name: productName,
           description,
-          price : Number(price),
+          price: Number(price),
           category,
-          image,
+          image: uploadedImageUrl,
         },
         {
           headers: {
@@ -57,13 +102,9 @@ const Sell = () => {
       });
     } catch (error) {
       toast({
-        title: error.response.data.message ?? error.message,
+        title: error.response?.data?.message ?? error.message,
       });
     }
-  };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
   };
 
   return (
@@ -132,17 +173,31 @@ const Sell = () => {
             </Select>
           </div>
 
-          <div>
-            <Label htmlFor="image" className="text-gray-700">
-              Product Image
-            </Label>
-            <Input
-              id="image"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full"
-            />
+          <div className="flex flex-col">
+            <div>
+              <Label htmlFor="image" className="text-gray-700">
+                Product Image
+              </Label>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full"
+              />
+            </div>
+            {image && (
+              <div className="mt-2">
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="Selected"
+                  className="w-full h-auto"
+                />
+                <Button onClick={removeImage} className="mt-2">
+                  Remove Image
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="mt-4">

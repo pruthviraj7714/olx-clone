@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { userRouter } from "./routes/user.js";
 import { productRouter } from "./routes/product.js";
-import "./db/db.js"
-
+import "./db/db.js";
 
 dotenv.config();
 
@@ -12,8 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 
+app.use("/uploads", express.static("uploads"));
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
 
