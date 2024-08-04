@@ -16,7 +16,7 @@ userRouter.post("/signup", async (req, res) => {
   }
 
   try {
-    const { username, email, password } = parsedBody.data;
+    const { username, email, password, location } = parsedBody.data;
 
     const isUserExist = await User.findOne({ $or: [{ username }, { email }] });
 
@@ -32,6 +32,7 @@ userRouter.post("/signup", async (req, res) => {
       username,
       email,
       password: encryptedPassword,
+      location
     });
 
     return res.status(201).json({
