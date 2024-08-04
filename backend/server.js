@@ -1,12 +1,19 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import { userRouter } from "./routes/user.js";
+import "./db/db.js"
+
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-const PORT = process.env.PORT;
+
+const PORT = process.env.PORT || 3000; 
+
+app.use("/api/v1/user", userRouter);
 
 app.get("/", (req, res) => {
   return res.json({
@@ -15,5 +22,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("Server is running on " + PORT);
+  console.log(`Server is running on port ${PORT}`);
 });
