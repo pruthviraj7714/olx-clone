@@ -13,14 +13,22 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
   soldStatus: {
     type: Boolean,
     default: false,
   },
-  user : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "User"
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   }
-});
+}, { timestamps: true });
 
 export const Product = mongoose.model("Product", productSchema);

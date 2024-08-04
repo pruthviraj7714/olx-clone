@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { userRouter } from "./routes/user.js";
+import { productRouter } from "./routes/product.js";
 import "./db/db.js"
 
 
@@ -14,6 +15,7 @@ app.use(cors());
 const PORT = process.env.PORT || 3000; 
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/product", productRouter);
 
 app.get("/", (req, res) => {
   return res.json({
