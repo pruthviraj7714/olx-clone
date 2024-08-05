@@ -27,11 +27,20 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-12 w-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-8 border-solid border-blue-500 border-t-transparent">
+          <div className="h-full w-full flex justify-center items-center">
+            <span className="text-blue-500 font-bold">Loading...</span>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen flex justify-center p-7 ">
+    <div className="min-h-screen flex flex-col  p-7 ">
+      <div className="text-4xl my-4 font-semibold">Fresh Recommendations</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products && products.length > 0 ? (
           products.map((product) => (
