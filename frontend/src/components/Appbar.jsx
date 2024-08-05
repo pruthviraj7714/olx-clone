@@ -1,5 +1,6 @@
 import { FaSearch, FaUser, FaDollarSign } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { AppMenu } from "./AppMenu";
 
 const Appbar = () => {
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ const Appbar = () => {
 
   return (
     <div className="h-16 flex justify-between items-center px-5 bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg">
-      <div className="text-2xl font-bold">OLX</div>
+      <div onClick={() => navigate('/')} className="text-2xl font-bold cursor-pointer">OLX</div>
       <div className="flex items-center">
         <input
           type="text"
@@ -35,6 +36,11 @@ const Appbar = () => {
           <FaDollarSign className="text-lg" />
           <span className="font-bold">Sell</span>
         </div>
+        {user && (
+          <div>
+            <AppMenu />
+          </div>
+        )}
       </div>
     </div>
   );
