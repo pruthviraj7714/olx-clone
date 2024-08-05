@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
     type : String,
     required : true
   },
+  shoppingCoins : {
+    type : Number
+  },
   purchasedProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,

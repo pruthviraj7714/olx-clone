@@ -32,7 +32,8 @@ userRouter.post("/signup", async (req, res) => {
       username,
       email,
       password: encryptedPassword,
-      location
+      location,
+      shoppingCoins : 5000
     });
 
     return res.status(201).json({
