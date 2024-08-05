@@ -76,7 +76,7 @@ export function AppMenu() {
                   toast({
                     title : "You Logged out"
                   })
-                  navigate("/signin");
+                  navigate("/login");
                 }}
               >
                 Logout
