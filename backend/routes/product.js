@@ -48,7 +48,7 @@ productRouter.post("/upload", (req, res) => {
 
 productRouter.get("/all", async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).populate("user", "username email location");
 
     return res.status(200).json({
       products,
