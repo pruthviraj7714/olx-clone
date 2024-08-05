@@ -5,6 +5,7 @@ import { productSchema } from "../schema/schema.js";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
+import { User } from "../models/userModel.js";
 
 export const productRouter = Router();
 
@@ -48,7 +49,10 @@ productRouter.post("/upload", (req, res) => {
 
 productRouter.get("/all", async (req, res) => {
   try {
-    const products = await Product.find({}).populate("user", "username email location");
+    const products = await Product.find({}).populate(
+      "user",
+      "username email location"
+    );
 
     return res.status(200).json({
       products,
@@ -84,9 +88,149 @@ productRouter.post("/sell", authMiddleware, async (req, res) => {
       price,
     });
 
+    const user = await User.findById(req.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    user.listedProducts.push(product);
+    await user.save();
+
     return res.status(201).json({
       message: "Product Successfully Added to Sell",
       product,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
+productRouter.get("/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const product = await Product.findById(id).populate(
+      "user",
+      "username location"
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        message: "No Product Found",
+      });
+    }
+
+    return res.json({
+      product,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+productRouter.post("/:id/wishlist", authMiddleware, async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const userId = req.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (!user.wishlist.includes(productId)) {
+      user.wishlist.push(productId);
+      await user.save();
+    }
+
+    return res.status(200).json({
+      message: "Product added to wishlist",
+      wishlist: user.wishlist,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
+productRouter.post("/:id/remove-wishlist", authMiddleware, async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const userId = req.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.wishlist.includes(productId)) {
+      user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
+      await user.save();
+    }
+
+    return res.status(200).json({
+      message: "Product removed from wishlist",
+      wishlist: user.wishlist,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
+productRouter.get("/:id/is-wishlisted", authMiddleware, async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const userId = req.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const isWishlisted = user.wishlist.includes(productId);
+
+    return res.status(200).json({
+      isWishlisted,
     });
   } catch (error) {
     return res.status(500).json({

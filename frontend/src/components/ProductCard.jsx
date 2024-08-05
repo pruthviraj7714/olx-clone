@@ -1,25 +1,83 @@
-import { useState } from "react";
-import {
-  FaCalendarWeek,
-  FaHeart,
-  FaLocationArrow,
-  FaRegHeart,
-  FaSearchLocation,
-} from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaCalendarWeek, FaHeart, FaLocationArrow } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { BACKEND_URL } from "@/config/config";
+import { useToast } from "./ui/use-toast";
 
 export const ProductCard = ({ product }) => {
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleLike = (e) => {
+  const { toast } = useToast();
+
+  const isWishlistedStatus = async () => {
+    try {
+      const res = await axios.get(
+        `http://${BACKEND_URL}/api/v1/product/${product._id}/is-wishlisted`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setIsLiked(res.data.isWishlisted);
+    } catch (error) {
+      toast({
+        title: error.response.data.message ?? error.message,
+      });
+    }
+  };
+
+  const handleLike = async (e) => {
     e.preventDefault();
+
+    if (isLiked) {
+      try {
+        const res = await axios.post(
+          `http://${BACKEND_URL}/api/v1/product/${product._id}/remove-wishlist`,
+          {},
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
+        toast({
+          title: res.data.message,
+        });
+      } catch (error) {
+        toast({ title: error.response.data.message });
+      }
+    } else {
+      try {
+        const res = await axios.post(
+          `http://${BACKEND_URL}/api/v1/product/${product._id}/wishlist`,
+          {},
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
+        toast({
+          title: res.data.message,
+        });
+      } catch (error) {
+        toast({ title: error.response.data.message });
+      }
+    }
+
     setIsLiked(!isLiked);
   };
 
+  useEffect(() => {
+    isWishlistedStatus();
+  }, []);
+
   return (
     <Link
-      to={`/product/${product._id}`}
+      to={`product/${product.category}/${product._id}`}
       className="w-[340px] h-[380px] flex flex-col bg-white shadow-lg rounded-lg overflow-hidden transform transition-all"
     >
       <div className="relative">

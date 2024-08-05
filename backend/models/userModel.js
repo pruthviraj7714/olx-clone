@@ -15,13 +15,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  location : {
-    type : String,
-    required : true
+  location: {
+    type: String,
+    required: true,
   },
-  shoppingCoins : {
-    type : Number
+  shoppingCoins: {
+    type: Number,
   },
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   purchasedProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,
