@@ -20,10 +20,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CiHeart, CiLogout, CiMoneyCheck1, CiSettings } from "react-icons/ci";
-import { FaMoneyBill, FaUser } from "react-icons/fa";
+import { FaHistory, FaMoneyBill, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./ui/use-toast";
-import { useEffect } from "react";
 
 export function AppMenu() {
     const navigate = useNavigate();
@@ -47,15 +46,21 @@ export function AppMenu() {
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
+          <div className="flex gap-1" onClick={() => navigate('/wishlist')}>
+            <CiHeart className="mr-2 h-4 w-4" />
+            <span>Wishlist</span>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
             <div className="flex gap-1" onClick={() => navigate('/on-sale')}>
               <FaMoneyBill className="mr-2 h-4 w-4" />
               <span>Products on Sale</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-          <div className="flex gap-1" onClick={() => navigate('/wishlist')}>
-            <CiHeart className="mr-2 h-4 w-4" />
-            <span>Wishlist</span>
+            <div className="flex gap-1" onClick={() => navigate('/purchase-history')}>
+              <FaHistory className="mr-2 h-4 w-4" />
+              <span>Purchase History</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
