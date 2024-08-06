@@ -175,4 +175,66 @@ userRouter.get("/info", authMiddleware, async (req, res) => {
   }
 });
 
+userRouter.get("/purchased-products", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.id;
 
+    const user = await User.findById(userId).populate("purchasedProducts");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (!Array.isArray(user.purchasedProducts)) {
+      return res.status(200).json({
+        products: [],
+      });
+    }
+
+    return res.status(200).json({
+      products : user.purchasedProducts,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
+userRouter.get("/sold-products", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.id;
+
+    const user = await User.findById(userId).populate("listedProducts");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (!Array.isArray(user.listedProducts)) {
+      return res.status(200).json({
+        products: [],
+      });
+    }
+
+    const products = user.listedProducts.filter(
+      (product) => product.soldStatus === true
+    );
+
+    return res.status(200).json({
+      products,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});

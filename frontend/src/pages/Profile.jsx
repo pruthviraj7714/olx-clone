@@ -5,6 +5,8 @@ import { BACKEND_URL } from "@/config/config";
 import { BookmarkIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { CiCoins1 } from "react-icons/ci";
+import { FaCoins } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Profile = () => {
@@ -59,8 +61,8 @@ const Profile = () => {
           </div>
           <div className="p-4 flex font-sans text-xl border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700">
             Shopping Coins:{" "}
-            <span className="font-bold text-gray-900 dark:text-gray-200 flex items-center ml-2">
-              <BookmarkIcon />
+            <span className="font-bold gap-1 text-gray-900 dark:text-gray-200 flex items-center ml-2">
+              <FaCoins size={20} />
               {userInfo.shoppingCoins}
             </span>
           </div>

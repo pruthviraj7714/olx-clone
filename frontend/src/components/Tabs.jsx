@@ -11,10 +11,57 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductCard } from "./ProductCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "@/config/config";
 
 export function ITabs() {
+  const [soldProducts, setSoldProducts] = useState([]);
+  const [purchasedProducts, setPurchasedProducts] = useState([]);
+  const getSoldProducts = async () => {
+    try {
+      const res = await axios.get(
+        `http://${BACKEND_URL}/api/v1/user/sold-products`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setSoldProducts(res.data.products);
+    } catch (error) {
+      toast({
+        title: error.response.data.message ?? error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getPurchasedProducts = async () => {
+    try {
+      const res = await axios.get(
+        `http://${BACKEND_URL}/api/v1/user/purchased-products`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setPurchasedProducts(res.data.products);
+    } catch (error) {
+      toast({
+        title: error.response.data.message ?? error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getPurchasedProducts();
+    getSoldProducts();
+  }, []);
   return (
-    <Tabs defaultValue="purchases" className="w-full max-w-2xl mx-auto mt-8">
+    <Tabs defaultValue="purchases" className="w-full max-w-4xl mx-auto mt-8">
       <TabsList className="flex justify-between bg-gray-100 p-2 rounded-lg shadow-md">
         <TabsTrigger
           value="purchases"
@@ -40,9 +87,18 @@ export function ITabs() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 space-y-4">
-           {/* <ProductCard className /> */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {purchasedProducts && purchasedProducts.length > 0 ? (
+                purchasedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              ) : (
+                <div className="col-span-full text-center font-semibold text-xl">
+                  No Products found!
+                </div>
+              )}
+            </div>
           </CardContent>
-       
         </Card>
       </TabsContent>
       <TabsContent value="sold" className="mt-4">
@@ -56,38 +112,18 @@ export function ITabs() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 space-y-4">
-            <div className="space-y-2">
-              <Label
-                htmlFor="current"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Current password
-              </Label>
-              <Input
-                id="current"
-                type="password"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label
-                htmlFor="new"
-                className="block text-sm font-medium text-gray-700"
-              >
-                New password
-              </Label>
-              <Input
-                id="new"
-                type="password"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {soldProducts && soldProducts.length > 0 ? (
+                soldProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              ) : (
+                <div className="col-span-full text-center font-semibold text-xl">
+                  No Products found!
+                </div>
+              )}
             </div>
           </CardContent>
-          <CardFooter className="p-4 border-t border-gray-200">
-            <Button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-              Save password
-            </Button>
-          </CardFooter>
         </Card>
       </TabsContent>
     </Tabs>
