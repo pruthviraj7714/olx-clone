@@ -40,7 +40,7 @@ const Profile = () => {
           <div className="mt-5 h-32 w-32 flex justify-center items-center bg-gray-300 dark:bg-gray-700 rounded-full border-4 border-gray-900 dark:border-gray-200 shadow-md">
             <img
               className="object-cover h-full w-full rounded-full"
-              src={"/logo.png"}
+              src={"/customer.jpg"}
               alt="profile-icon"
             />
           </div>
