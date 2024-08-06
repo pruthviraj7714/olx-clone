@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { FaCalendarWeek, FaHeart, FaLocationArrow } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BACKEND_URL } from "@/config/config";
 import { useToast } from "./ui/use-toast";
 
 export const ProductCard = ({ product }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const navigate = useNavigate();
 
   const { toast } = useToast();
 
@@ -30,7 +31,7 @@ export const ProductCard = ({ product }) => {
   };
 
   const handleLike = async (e) => {
-    e.preventDefault();
+    e.stopPropagation();
 
     if (isLiked) {
       try {
@@ -76,9 +77,11 @@ export const ProductCard = ({ product }) => {
   }, []);
 
   return (
-    <Link
-      to={`product/${product.category}/${product._id}`}
-      className="w-[340px] h-[380px] flex flex-col bg-white shadow-lg rounded-lg overflow-hidden transform transition-all"
+    <div
+      onClick={() => {
+        navigate(`/product/${product.category}/${product._id}`);
+      }}
+      className="w-[340px] h-[380px] flex flex-col cursor-pointer bg-white shadow-lg rounded-lg overflow-hidden transform transition-all"
     >
       <div className="relative">
         <img
@@ -114,6 +117,6 @@ export const ProductCard = ({ product }) => {
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

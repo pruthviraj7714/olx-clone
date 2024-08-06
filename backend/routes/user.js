@@ -1,8 +1,9 @@
 import { User } from "../models/userModel.js";
 import { signinSchema, signupSchema } from "../schema/schema.js";
 import bcrypt from "bcrypt";
-import express from "express"
+import express from "express";
 import jwt from "jsonwebtoken";
+import { authMiddleware } from "../middleware.js";
 
 export const userRouter = express.Router();
 
@@ -33,7 +34,7 @@ userRouter.post("/signup", async (req, res) => {
       email,
       password: encryptedPassword,
       location,
-      shoppingCoins : 5000
+      shoppingCoins: 5000,
     });
 
     return res.status(201).json({
@@ -85,6 +86,39 @@ userRouter.post("/signin", async (req, res) => {
     return res.status(500).json({
       message: "Internal Server Error!",
       error: error.message,
+    });
+  }
+});
+
+userRouter.get("/on-sell", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.id;
+
+    const user = await User.findById(userId).populate("listedProducts");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (!user.listedProducts) {
+      return res.status(404).json({
+        message: "No products found",
+      });
+    }
+
+    const products = user.listedProducts.filter(
+      (product) => product.soldStatus === false
+    );
+
+    return res.status(200).json({
+      products,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
     });
   }
 });
