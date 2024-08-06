@@ -34,7 +34,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="min-h-screen  duration-300">
+    <div className="min-h-screen duration-300">
       <div className="flex flex-col lg:flex-row justify-evenly items-center py-10">
         <div className="flex flex-col items-center">
           <div className="mt-5 h-32 w-32 flex justify-center items-center bg-gray-300 dark:bg-gray-700 rounded-full border-4 border-gray-900 dark:border-gray-200 shadow-md">

@@ -14,6 +14,7 @@ import { ProductCard } from "./ProductCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "@/config/config";
+import MiniCard from "./MiniCard";
 
 export function ITabs() {
   const [soldProducts, setSoldProducts] = useState([]);
@@ -61,7 +62,10 @@ export function ITabs() {
     getSoldProducts();
   }, []);
   return (
-    <Tabs defaultValue="purchases" className="w-full max-w-4xl mx-auto mt-8">
+    <Tabs
+      defaultValue="purchases"
+      className="w-full max-w-4xl mx-auto mt-8 min-h-screen"
+    >
       <TabsList className="flex justify-between bg-gray-100 p-2 rounded-lg shadow-md">
         <TabsTrigger
           value="purchases"
@@ -87,10 +91,10 @@ export function ITabs() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 space-x-10">
               {purchasedProducts && purchasedProducts.length > 0 ? (
                 purchasedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <MiniCard key={product.id} product={product} />
                 ))
               ) : (
                 <div className="col-span-full text-center font-semibold text-xl">
@@ -115,7 +119,7 @@ export function ITabs() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {soldProducts && soldProducts.length > 0 ? (
                 soldProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <MiniCard key={product.id} product={product} />
                 ))
               ) : (
                 <div className="col-span-full text-center font-semibold text-xl">
