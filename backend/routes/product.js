@@ -27,7 +27,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 }).single("file");
 
-// Upload endpoint
 productRouter.post("/upload", (req, res) => {
   upload(req, res, (err) => {
     if (err) {
@@ -232,6 +231,50 @@ productRouter.get("/:id/is-wishlisted", authMiddleware, async (req, res) => {
     return res.status(200).json({
       isWishlisted,
     });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
+productRouter.post("/:id/purchase", authMiddleware, async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const userId = req.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.shoppingCoins < product.price) {
+      return res.status(403).json({
+        message: "Insufficient Shopping Coins"
+      });
+    }
+
+    user.shoppingCoins -= product.price;
+    user.purchasedProducts.push(productId);
+    await user.save();
+
+    product.soldStatus = true;
+    await product.save();
+
+    return res.status(200).json({
+      message: "Product Successfully Purchased"
+    });
+
   } catch (error) {
     return res.status(500).json({
       message: "Internal Server Error",

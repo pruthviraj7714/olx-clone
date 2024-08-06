@@ -35,6 +35,26 @@ const Product = () => {
     }
   };
 
+  const purchaseProduct = async () => {
+    try {
+      const res = await axios.post(
+        `http://${BACKEND_URL}/api/v1/product/${product._id}/purchase`,
+        {},
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      toast({ title: res.data.message });
+    } catch (error) {
+      toast({
+        title: error.response.data.message ?? error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     getProductInfo();
   }, []);
@@ -128,7 +148,9 @@ const Product = () => {
                         Close
                       </Button>
                     </DialogClose>
-                    <Button type="submit">Buy Product</Button>
+                    <Button onClick={purchaseProduct} type="submit">
+                      Buy Product
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
