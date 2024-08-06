@@ -19,8 +19,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { CiLogout, CiSettings } from "react-icons/ci";
-import { FaUser } from "react-icons/fa";
+import { CiHeart, CiLogout, CiMoneyCheck1, CiSettings } from "react-icons/ci";
+import { FaMoneyBill, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./ui/use-toast";
 import { useEffect } from "react";
@@ -41,12 +41,22 @@ export function AppMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
+          <div className="flex gap-1" onClick={() => navigate('/profile')}>
             <FaUser className="mr-2 h-4 w-4" />
             <span>Profile</span>
+            </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <CiSettings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <div className="flex gap-1" onClick={() => navigate('/on-sale')}>
+              <FaMoneyBill className="mr-2 h-4 w-4" />
+              <span>Products on Sale</span>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+          <div className="flex gap-1" onClick={() => navigate('/wishlist')}>
+            <CiHeart className="mr-2 h-4 w-4" />
+            <span>Wishlist</span>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
