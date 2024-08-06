@@ -48,7 +48,9 @@ productRouter.post("/upload", (req, res) => {
 
 productRouter.get("/all", async (req, res) => {
   try {
-    const products = await Product.find({}).populate(
+    const products = await Product.find({
+      soldStatus : false
+    }).populate(
       "user",
       "username email location"
     );
@@ -251,6 +253,12 @@ productRouter.post("/:id/purchase", authMiddleware, async (req, res) => {
       });
     }
 
+    if (product.soldStatus) {
+      return res.status(400).json({
+        message: "Product already sold",
+      });
+    }
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -260,22 +268,31 @@ productRouter.post("/:id/purchase", authMiddleware, async (req, res) => {
 
     if (user.shoppingCoins < product.price) {
       return res.status(403).json({
-        message: "Insufficient Shopping Coins"
+        message: "Insufficient Shopping Coins",
+      });
+    }
+
+    const sellerUser = await User.findById(product.user);
+    if (!sellerUser) {
+      return res.status(404).json({
+        message: "Seller not found",
       });
     }
 
     user.shoppingCoins -= product.price;
+    sellerUser.shoppingCoins += product.price;
     user.purchasedProducts.push(productId);
     await user.save();
+    await sellerUser.save();
 
     product.soldStatus = true;
     await product.save();
 
     return res.status(200).json({
-      message: "Product Successfully Purchased"
+      message: "Product Successfully Purchased",
     });
-
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
