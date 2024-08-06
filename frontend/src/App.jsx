@@ -9,6 +9,7 @@ import Product from "./pages/Product";
 import SaleProducts from "./pages/SaleProducts";
 import Wishlist from "./pages/Wishlist";
 import Profile from "./pages/Profile";
+import PurchaseHistory from "./pages/PurchaseHistory";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           element={<WithAppbar element={<Wishlist />} />}
         />
         <Route path="/profile" element={<WithAppbar element={<Profile />} />} />
+        <Route path="/purchase-history" element={<WithAppbar element={<PurchaseHistory />} />} />
       </Routes>
     </BrowserRouter>
   );
