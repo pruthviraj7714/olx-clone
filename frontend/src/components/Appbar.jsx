@@ -8,7 +8,9 @@ const Appbar = () => {
 
   return (
     <div className="h-16 flex justify-between items-center px-5 bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg">
-      <div onClick={() => navigate('/')} className="text-2xl font-bold cursor-pointer">OLX</div>
+      <div onClick={() => navigate('/')} className="text-2xl font-bold cursor-pointer">
+        <img src={"/logo.png"} alt="Logo" className="h-10 w-16 object-cover" />
+      </div>
       <div className="flex items-center">
         <input
           type="text"

@@ -28,12 +28,8 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-12 w-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-8 border-solid border-blue-500 border-t-transparent">
-          <div className="h-full w-full flex justify-center items-center">
-            <span className="text-blue-500 font-bold">Loading...</span>
-          </div>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-8 border-solid border-blue-500 border-t-transparent"></div>
       </div>
     );
   }
