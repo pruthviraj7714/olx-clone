@@ -101,7 +101,7 @@ const Product = () => {
           </div>
           <div className="flex flex-col items-center w-1/3 bg-gray-100 p-4 rounded-lg shadow-md">
             <div className="text-4xl font-bold text-gray-800 mb-4">
-              ${product.price}
+              ₹{product.price}
             </div>
             <div>
               <Dialog>
