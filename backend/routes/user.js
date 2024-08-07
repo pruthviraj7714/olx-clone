@@ -108,12 +108,8 @@ userRouter.get("/on-sell", authMiddleware, async (req, res) => {
       });
     }
 
-    const products = user.listedProducts.filter(
-      (product) => product.soldStatus === false
-    );
-
     return res.status(200).json({
-      products,
+      products : user.listedProducts,
     });
   } catch (error) {
     console.error(error);
