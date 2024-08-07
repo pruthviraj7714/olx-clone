@@ -16,7 +16,7 @@ export const ProductCard = ({ product }) => {
   const isWishlistedStatus = async () => {
     try {
       const res = await axios.get(
-        `http://${BACKEND_URL}/api/v1/product/${product._id}/is-wishlisted`,
+        `https://${BACKEND_URL}/api/v1/product/${product._id}/is-wishlisted`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
