@@ -12,7 +12,7 @@ const Wishlist = () => {
   const getProducts = async () => {
     try {
       const res = await axios.get(
-        `http://${BACKEND_URL}/api/v1/user/wishlist`,
+        `https://${BACKEND_URL}/api/v1/user/wishlist`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

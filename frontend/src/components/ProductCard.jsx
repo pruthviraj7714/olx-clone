@@ -45,7 +45,7 @@ export const ProductCard = ({ product }) => {
     if (isLiked) {
       try {
         const res = await axios.post(
-          `http://${BACKEND_URL}/api/v1/product/${product._id}/remove-wishlist`,
+          `https://${BACKEND_URL}/api/v1/product/${product._id}/remove-wishlist`,
           {},
           {
             headers: {
@@ -62,7 +62,7 @@ export const ProductCard = ({ product }) => {
     } else {
       try {
         const res = await axios.post(
-          `http://${BACKEND_URL}/api/v1/product/${product._id}/wishlist`,
+          `https://${BACKEND_URL}/api/v1/product/${product._id}/wishlist`,
           {},
           {
             headers: {

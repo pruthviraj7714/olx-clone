@@ -49,7 +49,7 @@ const Sell = () => {
 
     try {
       const response = await axios.post(
-        `http://${BACKEND_URL}/api/v1/product/upload`, 
+        `https://${BACKEND_URL}/api/v1/product/upload`, 
         formData,
         {
           headers: {
@@ -82,7 +82,7 @@ const Sell = () => {
 
     try {
       const res = await axios.post(
-        `http://${BACKEND_URL}/api/v1/product/sell`,
+        `https://${BACKEND_URL}/api/v1/product/sell`,
         {
           name: productName,
           description,

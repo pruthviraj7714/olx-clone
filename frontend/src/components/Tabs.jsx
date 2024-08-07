@@ -22,7 +22,7 @@ export function ITabs() {
   const getSoldProducts = async () => {
     try {
       const res = await axios.get(
-        `http://${BACKEND_URL}/api/v1/user/sold-products`,
+        `https://${BACKEND_URL}/api/v1/user/sold-products`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -41,7 +41,7 @@ export function ITabs() {
   const getPurchasedProducts = async () => {
     try {
       const res = await axios.get(
-        `http://${BACKEND_URL}/api/v1/user/purchased-products`,
+        `https://${BACKEND_URL}/api/v1/user/purchased-products`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

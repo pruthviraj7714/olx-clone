@@ -13,7 +13,7 @@ const SaleProducts = () => {
 
   const getProducts = async () => {
     try {
-      const res = await axios.get(`http://${BACKEND_URL}/api/v1/user/on-sell`, {
+      const res = await axios.get(`https://${BACKEND_URL}/api/v1/user/on-sell`, {
         headers: {
           Authorization: localStorage.getItem("token"),
         },

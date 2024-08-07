@@ -1,1 +1,1 @@
-export const BACKEND_URL = "localhost:3000"
+export const BACKEND_URL = "olx-clone-wmxn.onrender.com"

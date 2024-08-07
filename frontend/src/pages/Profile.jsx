@@ -13,7 +13,7 @@ const Profile = () => {
 
   const getUserInfo = async () => {
     try {
-      const res = await axios.get(`http://${BACKEND_URL}/api/v1/user/info`, {
+      const res = await axios.get(`https://${BACKEND_URL}/api/v1/user/info`, {
         headers: {
           Authorization: localStorage.getItem("token"),
         },

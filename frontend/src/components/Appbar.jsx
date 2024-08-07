@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaSearch, FaUser, FaDollarSign } from "react-icons/fa";
+import {  FaUser, FaDollarSign } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AppMenu } from "./AppMenu";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";

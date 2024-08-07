@@ -10,7 +10,7 @@ const PurchaseHistory = () => {
   const getPurchaseHistory = async () => {
     try {
       const res = await axios.get(
-        `http://${BACKEND_URL}/api/v1/user/purchased-products`,
+        `https://${BACKEND_URL}/api/v1/user/purchased-products`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

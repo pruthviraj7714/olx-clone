@@ -27,7 +27,7 @@ const Product = () => {
 
   const getProductInfo = async () => {
     try {
-      const res = await axios.get(`http://${BACKEND_URL}/api/v1/product/${id}`);
+      const res = await axios.get(`https://${BACKEND_URL}/api/v1/product/${id}`);
       setProduct(res.data.product);
     } catch (error) {
       toast({
@@ -48,7 +48,7 @@ const Product = () => {
     }
     try {
       const res = await axios.post(
-        `http://${BACKEND_URL}/api/v1/product/${product._id}/purchase`,
+        `https://${BACKEND_URL}/api/v1/product/${product._id}/purchase`,
         {},
         {
           headers: {
