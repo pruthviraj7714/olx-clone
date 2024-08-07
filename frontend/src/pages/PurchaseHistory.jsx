@@ -31,7 +31,7 @@ const PurchaseHistory = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 flex items-center justify-center py-10 dark:bg-slate-800">
+    <div className="bg-gray-50 flex justify-center py-10 min-h-screen dark:bg-slate-800">
       <div className="container mx-auto p-6 bg-white dark:bg-slate-700 shadow-lg rounded-lg">
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold text-gray-700 dark:text-gray-300">
@@ -43,7 +43,7 @@ const PurchaseHistory = () => {
         </div>
         {history.length === 0 ? (
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4 text-gray-700 dark:text-gray-300">
+            <h2 className="text-xl font-bold my-4 text-red-400 dark:text-gray-300">
               No Purchases Yet
             </h2>
             <p className="text-gray-500 dark:text-gray-400 mb-6">

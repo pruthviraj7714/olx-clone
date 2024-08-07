@@ -36,14 +36,14 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col  p-7 ">
-      <div className="text-4xl my-4 font-semibold">Fresh Recommendations</div>
+      <div className="text-4xl my-6 font-semibold">Fresh Recommendations</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products && products.length > 0 ? (
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))
         ) : (
-          <div className="col-span-full text-center text-white font-semibold text-xl">
+          <div className="col-span-full text-center font-semibold text-xl">
             No Products found!
           </div>
         )}

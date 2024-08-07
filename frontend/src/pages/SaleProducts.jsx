@@ -1,10 +1,10 @@
-import { ProductCard } from "@/components/ProductCard";
+import MiniCard from "@/components/MiniCard";
 import { useToast } from "@/components/ui/use-toast";
 import { BACKEND_URL } from "@/config/config";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaBuyNLarge, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { MdSell } from "react-icons/md";
+import {  FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
 
 const SaleProducts = () => {
   const [products, setProducts] = useState([]);
@@ -24,6 +24,7 @@ const SaleProducts = () => {
       toast({
         title: "Error fetching products",
         description: error.response?.data?.message ?? error.message,
+        variant : "destructive"
       });
     } finally {
       setLoading(false);
@@ -50,9 +51,9 @@ const SaleProducts = () => {
             key={product.id}
             className="transform transition-transform duration-300 hover:scale-105 bg-white rounded-lg shadow-lg p-5 hover:bg-blue-50 flex flex-col items-center"
           >
-            <ProductCard product={product} />
+            <MiniCard product={product} />
             <div className="text-center text-lg font-medium mt-4 flex items-center gap-2">
-              {product.soldStauts ? (
+              {product.soldStatus ? (
                 <div className="flex items-center gap-1 text-green-500 animate-pulse">
                   <FaCheckCircle /> Sold
                 </div>

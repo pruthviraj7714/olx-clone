@@ -49,7 +49,7 @@ const Sell = () => {
 
     try {
       const response = await axios.post(
-        `http://${BACKEND_URL}/api/v1/product/upload`, // Adjust this URL to your actual upload endpoint
+        `http://${BACKEND_URL}/api/v1/product/upload`, 
         formData,
         {
           headers: {
@@ -215,7 +215,7 @@ const Sell = () => {
               )}
             </div>
 
-            <div className="mt-6">
+            <div>
               <Button
                 type="submit"
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md"

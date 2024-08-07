@@ -32,6 +32,7 @@ const Product = () => {
     } catch (error) {
       toast({
         title: error.response.data.message ?? error.message,
+        variant : "destructive"
       });
     }
   };
@@ -76,7 +77,7 @@ const Product = () => {
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
         <div className="flex justify-between items-start gap-8">

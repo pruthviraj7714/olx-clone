@@ -24,6 +24,7 @@ const Wishlist = () => {
       toast({
         title: "Error fetching products",
         description: error.response?.data?.message ?? error.message,
+        variant : "destructive"
       });
     } finally {
       setLoading(false);

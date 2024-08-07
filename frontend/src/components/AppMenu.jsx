@@ -19,14 +19,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { CiHeart, CiLogout, CiMoneyCheck1, CiSettings } from "react-icons/ci";
+import { CiHeart } from "react-icons/ci";
 import { FaHistory, FaMoneyBill, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./ui/use-toast";
 
 export function AppMenu() {
-    const navigate = useNavigate();
-    const { toast } = useToast();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   return (
     <DropdownMenu>
@@ -40,25 +40,28 @@ export function AppMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-          <div className="flex gap-1" onClick={() => navigate('/profile')}>
-            <FaUser className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+            <div className="flex gap-1" onClick={() => navigate("/profile")}>
+              <FaUser className="mr-2 h-4 w-4" />
+              <span>Profile</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-          <div className="flex gap-1" onClick={() => navigate('/wishlist')}>
-            <CiHeart className="mr-2 h-4 w-4" />
-            <span>Wishlist</span>
+            <div className="flex gap-1" onClick={() => navigate("/wishlist")}>
+              <CiHeart className="mr-2 h-4 w-4" />
+              <span>Wishlist</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <div className="flex gap-1" onClick={() => navigate('/on-sale')}>
+            <div className="flex gap-1" onClick={() => navigate("/on-sale")}>
               <FaMoneyBill className="mr-2 h-4 w-4" />
               <span>Products on Sale</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <div className="flex gap-1" onClick={() => navigate('/purchase-history')}>
+            <div
+              className="flex gap-1"
+              onClick={() => navigate("/purchase-history")}
+            >
               <FaHistory className="mr-2 h-4 w-4" />
               <span>Purchase History</span>
             </div>
@@ -89,9 +92,9 @@ export function AppMenu() {
                 onClick={() => {
                   localStorage.removeItem("token");
                   toast({
-                    title : "You Logged out"
-                  })
-                  navigate("/login");
+                    title: "You Logged out",
+                  });
+                  navigate("/")
                 }}
               >
                 Logout

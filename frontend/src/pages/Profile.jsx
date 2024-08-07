@@ -22,6 +22,7 @@ const Profile = () => {
     } catch (error) {
       toast({
         title: error.response.data.message ?? error.message,
+        variant : "destructive"
       });
     }
   };
