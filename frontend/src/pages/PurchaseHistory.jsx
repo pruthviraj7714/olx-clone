@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const PurchaseHistory = () => {
   const [history, setHistory] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const getPurchaseHistory = async () => {
     try {
       const res = await axios.get(
@@ -23,12 +23,22 @@ const PurchaseHistory = () => {
         title: error.response.data.message ?? error.message,
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getPurchaseHistory();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-8 border-solid border-blue-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 flex justify-center py-10 min-h-screen dark:bg-slate-800">
