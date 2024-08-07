@@ -15,14 +15,15 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { CiMapPin, CiShoppingCart } from "react-icons/ci";
 import { FaCalendar, FaLocationArrow, FaUser } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Product = () => {
   const { id } = useParams();
 
   const [product, setProduct] = useState({});
-
+  const user = localStorage.getItem("token");
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const getProductInfo = async () => {
     try {
@@ -36,6 +37,14 @@ const Product = () => {
   };
 
   const purchaseProduct = async () => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
       const res = await axios.post(
         `http://${BACKEND_URL}/api/v1/product/${product._id}/purchase`,
@@ -47,6 +56,7 @@ const Product = () => {
         }
       );
       toast({ title: res.data.message });
+      navigate('/purchase-history')
     } catch (error) {
       toast({
         title: error.response.data.message ?? error.message,
@@ -142,15 +152,21 @@ const Product = () => {
                       - ₹{product.price}
                     </p>
                   </div>
-                  <DialogFooter className="mt-6">
-                    <DialogClose asChild>
-                      <Button type="button" variant="secondary">
-                        Close
+                  <DialogFooter>
+                    <div className="flex justify-between items-center">
+                      <DialogClose asChild>
+                        <Button type="button" variant="destructive">
+                          Close
+                        </Button>
+                      </DialogClose>
+                      <Button
+                        onClick={purchaseProduct}
+                        className="bg-green-400 hover:bg-green-500 text-black"
+                        type="submit"
+                      >
+                        Buy Product
                       </Button>
-                    </DialogClose>
-                    <Button onClick={purchaseProduct} type="submit">
-                      Buy Product
-                    </Button>
+                    </div>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>

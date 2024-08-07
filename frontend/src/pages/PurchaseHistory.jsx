@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "@/config/config";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { CiShoppingBasket, CiShoppingCart } from "react-icons/ci";
+import { CiShoppingBasket } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
 const PurchaseHistory = () => {
@@ -33,6 +33,14 @@ const PurchaseHistory = () => {
   return (
     <div className="bg-gray-50 flex items-center justify-center py-10 dark:bg-slate-800">
       <div className="container mx-auto p-6 bg-white dark:bg-slate-700 shadow-lg rounded-lg">
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+            Purchase History
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400">
+            Here is a list of all the products you have purchased.
+          </p>
+        </div>
         {history.length === 0 ? (
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4 text-gray-700 dark:text-gray-300">
@@ -49,54 +57,66 @@ const PurchaseHistory = () => {
             </Link>
           </div>
         ) : (
-          <table className="min-w-full table-auto">
-            <thead>
-              <tr className="bg-gray-200 dark:bg-slate-600">
-                <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
-                  Product
-                </th>
-                <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
-                  Details
-                </th>
-                <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
-                  Price
-                </th>
-                <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((product) => (
-                <tr
-                  key={product._id}
-                  className="border-b hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-900 dark:text-gray-200 transition-colors duration-150"
-                >
-                  <td className="py-3 px-4">
-                    <div className="flex gap-2">
-                      <CiShoppingBasket size={25} />
-                      <span>{product.name}</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span>{product.updatedAt}</span>
-                  </td>
-                  <td className="py-3 px-4">₹ {product.price}</td>
-                  <td className="py-3 px-4">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        product.soldStatus
-                          ? "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100"
-                          : "bg-red-100 text-red-700 dark:bg-red-700 dark:text-red-100"
-                      }`}
+          <div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto">
+                <thead>
+                  <tr className="bg-gray-200 dark:bg-slate-600">
+                    <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
+                      Product
+                    </th>
+                    <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
+                      Details
+                    </th>
+                    <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
+                      Price
+                    </th>
+                    <th className="py-3 px-4 text-left font-semibold text-sm text-gray-700 dark:text-gray-300">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {history.map((product) => (
+                    <tr
+                      key={product._id}
+                      className="border-b hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-900 dark:text-gray-200 transition-colors duration-150"
                     >
-                      {product.soldStatus ? "Success" : "Failed" }
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      <td className="py-3 px-4">
+                        <div className="flex gap-2 items-center">
+                          <CiShoppingBasket size={25} />
+                          <span>{product.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span>{product.updatedAt}</span>
+                      </td>
+                      <td className="py-3 px-4">₹ {product.price}</td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            product.soldStatus
+                              ? "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100"
+                              : "bg-red-100 text-red-700 dark:bg-red-700 dark:text-red-100"
+                          }`}
+                        >
+                          {product.soldStatus ? "Success" : "Failed"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-6 text-center">
+              <Link
+                to={"/"}
+                className="px-4 py-2 font-semibold bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
+              >
+                Explore More Products
+              </Link>
+            </div>
+          </div>
         )}
       </div>
     </div>

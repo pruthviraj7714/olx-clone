@@ -9,6 +9,7 @@ import { useToast } from "./ui/use-toast";
 export const ProductCard = ({ product }) => {
   const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
+  const user = localStorage.getItem("token");
 
   const { toast } = useToast();
 
@@ -32,7 +33,15 @@ export const ProductCard = ({ product }) => {
 
   const handleLike = async (e) => {
     e.stopPropagation();
-
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to continue.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (isLiked) {
       try {
         const res = await axios.post(
@@ -73,7 +82,9 @@ export const ProductCard = ({ product }) => {
   };
 
   useEffect(() => {
-    isWishlistedStatus();
+    if (user) {
+      isWishlistedStatus();
+    }
   }, []);
 
   return (

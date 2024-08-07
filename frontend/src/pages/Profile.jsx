@@ -1,13 +1,10 @@
 import { ITabs } from "@/components/Tabs";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { BACKEND_URL } from "@/config/config";
-import { BookmarkIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { CiCoins1 } from "react-icons/ci";
 import { FaCoins } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { MdMap } from "react-icons/md";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -64,6 +61,13 @@ const Profile = () => {
             <span className="font-bold gap-1 text-gray-900 dark:text-gray-200 flex items-center ml-2">
               <FaCoins size={20} />
               {userInfo.shoppingCoins}
+            </span>
+          </div>
+          <div className="p-4 flex font-sans text-xl border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700">
+            Location:{" "}
+            <span className="font-bold gap-1 text-gray-900 dark:text-gray-200 flex items-center ml-2">
+              <MdMap size={20} />
+              {userInfo.location}
             </span>
           </div>
         </div>
