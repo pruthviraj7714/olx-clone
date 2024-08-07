@@ -16,16 +16,13 @@ const Appbar = () => {
         onClick={() => navigate("/")}
         className="text-2xl font-bold cursor-pointer"
       >
-        <img src={"/logo.png"} alt="Logo" className="h-10 w-16 object-cover" />
-      </div>
-      <div className="flex items-center">
-        <input
-          type="text"
-          className="p-2 rounded-full border-2 border-transparent focus:border-white focus:outline-none transition duration-300 ease-in-out"
-          placeholder="Search here"
+        <img
+          src={"/logo.jpg"}
+          alt="Logo"
+          className="h-10 w-16 rounded-full object-cover"
         />
-        <FaSearch className="ml-2 text-lg cursor-pointer" />
       </div>
+
       <div className="flex items-center gap-6">
         {!user && (
           <Dialog>
