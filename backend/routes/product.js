@@ -39,9 +39,7 @@ productRouter.post("/upload", (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${
-      req.file.filename
-    }`;
+    const fileUrl = `https://olx-clone-wmxn.onrender.com/uploads/${req.file.filename}`;
     res.status(200).json({ url: fileUrl });
   });
 });
@@ -49,11 +47,8 @@ productRouter.post("/upload", (req, res) => {
 productRouter.get("/all", async (req, res) => {
   try {
     const products = await Product.find({
-      soldStatus : false
-    }).populate(
-      "user",
-      "username email location"
-    );
+      soldStatus: false,
+    }).populate("user", "username email location");
 
     return res.status(200).json({
       products,
