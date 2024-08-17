@@ -3,25 +3,18 @@ import { Product } from "../models/productModel.js";
 import { authMiddleware } from "../middleware.js";
 import { productSchema } from "../schema/schema.js";
 import multer from "multer";
-import fs from "fs";
-import path from "path";
 import { User } from "../models/userModel.js";
+import  cloudinary from "cloudinary"
 
 export const productRouter = Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadDir = "uploads/";
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
-    }
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECERT,
 });
 
+const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 },
@@ -39,8 +32,26 @@ productRouter.post("/upload", (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const fileUrl = `https://olx-clone-wmxn.onrender.com/uploads/${req.file.filename}`;
-    res.status(200).json({ url: fileUrl });
+    cloudinary.uploader
+      .upload_stream(
+        {
+          folder: "uploads",
+          resource_type: "image",
+        },
+        (error, result) => {
+          if (error) {
+            return res
+              .status(500)
+              .json({
+                message: "Cloudinary upload failed",
+                error: error.message,
+              });
+          }
+
+          res.status(200).json({ url: result.secure_url });
+        }
+      )
+      .end(req.file.buffer);
   });
 });
 
