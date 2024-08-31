@@ -16,7 +16,7 @@ export const ProductCard = ({ product }) => {
   const isWishlistedStatus = async () => {
     try {
       const res = await axios.get(
-        `https://${BACKEND_URL}/api/v1/product/${product._id}/is-wishlisted`,
+        `${BACKEND_URL}/api/v1/product/${product._id}/is-wishlisted`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -45,7 +45,7 @@ export const ProductCard = ({ product }) => {
     if (isLiked) {
       try {
         const res = await axios.post(
-          `https://${BACKEND_URL}/api/v1/product/${product._id}/remove-wishlist`,
+          `${BACKEND_URL}/api/v1/product/${product._id}/remove-wishlist`,
           {},
           {
             headers: {
@@ -62,7 +62,7 @@ export const ProductCard = ({ product }) => {
     } else {
       try {
         const res = await axios.post(
-          `https://${BACKEND_URL}/api/v1/product/${product._id}/wishlist`,
+          `${BACKEND_URL}/api/v1/product/${product._id}/wishlist`,
           {},
           {
             headers: {

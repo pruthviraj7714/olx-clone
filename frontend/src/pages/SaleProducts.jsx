@@ -1,4 +1,5 @@
 import MiniCard from "@/components/MiniCard";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { BACKEND_URL } from "@/config/config";
 import axios from "axios";
@@ -9,11 +10,12 @@ import {  FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 const SaleProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isDeleted, setIsDeleted] = useState(false);
   const { toast } = useToast();
 
   const getProducts = async () => {
     try {
-      const res = await axios.get(`https://${BACKEND_URL}/api/v1/user/on-sell`, {
+      const res = await axios.get(`${BACKEND_URL}/api/v1/user/on-sell`, {
         headers: {
           Authorization: localStorage.getItem("token"),
         },
@@ -31,9 +33,30 @@ const SaleProducts = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const res =await axios.delete(`${BACKEND_URL}/api/v1/product/delete/${id}`, {
+        headers : {
+          Authorization : localStorage.getItem("token")
+        }        
+      })
+      toast({
+        title : res.data.message,
+      })
+      setIsDeleted(true);
+    } catch (error) {
+      toast({
+        title: "Error fetching products",
+        description: error.response?.data?.message ?? error.message,
+        variant : "destructive"
+      });
+    }
+  }
+
   useEffect(() => {
     getProducts();
-  }, []);
+    setIsDeleted(false);
+  }, [isDeleted]);
 
   if (loading) {
     return (
@@ -62,8 +85,15 @@ const SaleProducts = () => {
                   <FaCheckCircle /> Sold
                 </div>
               ) : (
-                <div className="flex items-center gap-1 text-red-500">
-                  <FaTimesCircle /> UnSold
+                <div className="flex justify-between items-center gap-10">
+                 <div className="flex items-center gap-1.5 text-red-500">
+                    <FaTimesCircle /> UnSold
+                 </div>
+                 <div className="">
+                  <Button onClick={() => handleDelete(product._id)} variant="destructive">
+                    Remove
+                  </Button>
+                 </div>
                 </div>
               )}
             </div>

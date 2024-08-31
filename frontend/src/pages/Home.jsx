@@ -11,7 +11,7 @@ const Home = () => {
 
   const getProducts = async () => {
     try {
-      const res = await axios.get(`https://${BACKEND_URL}/api/v1/product/all`);
+      const res = await axios.get(`${BACKEND_URL}/api/v1/product/all`);
       setProducts(res.data.products);
     } catch (error) {
       toast({

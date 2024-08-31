@@ -1,1 +1,1 @@
-export const BACKEND_URL = "olx-clone-wmxn.onrender.com"
+export const BACKEND_URL = "https://olx-clone-wmxn.onrender.com"

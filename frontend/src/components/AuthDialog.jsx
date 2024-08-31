@@ -37,7 +37,7 @@ const AuthDialog = ({ isLogin, setIsLogin }) => {
     if (isLogin) {
       try {
         const res = await axios.post(
-          `https://${BACKEND_URL}/api/v1/user/signin`,
+          `${BACKEND_URL}/api/v1/user/signin`,
           {
             email,
             password,
@@ -58,7 +58,7 @@ const AuthDialog = ({ isLogin, setIsLogin }) => {
       }
     } else {
       try {
-        await axios.post(`https://${BACKEND_URL}/api/v1/user/signup`, {
+        await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
           username,
           email,
           password,

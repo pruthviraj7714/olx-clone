@@ -31,11 +31,17 @@ const Sell = () => {
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    setImage(file);
+
+    if (file) {
+      const tempUrl = URL.createObjectURL(file);
+      setImageUrl(tempUrl);
+    }
   };
 
   const removeImage = () => {
@@ -49,7 +55,7 @@ const Sell = () => {
 
     try {
       const response = await axios.post(
-        `https://${BACKEND_URL}/api/v1/product/upload`, 
+        `${BACKEND_URL}/api/v1/product/upload`,
         formData,
         {
           headers: {
@@ -58,31 +64,44 @@ const Sell = () => {
           },
         }
       );
-      return response.data.url;
+      return response.data.result.secure_url;
     } catch (error) {
       toast({
         title: "Image upload failed",
         description: error.response?.data?.message ?? error.message,
       });
+      throw new Error("Image upload failed");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!productName || !description || !price || !category) {
+      toast({
+        title: "Please fill out all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     let uploadedImageUrl = imageUrl;
-    if (image && !imageUrl) {
+    if (image && !uploadedImageUrl) {
       try {
         uploadedImageUrl = await uploadImage(image);
         setImageUrl(uploadedImageUrl);
       } catch (error) {
+        toast({
+          title: error.message,
+          variant: "destructive",
+        });
         return;
       }
     }
 
     try {
       const res = await axios.post(
-        `https://${BACKEND_URL}/api/v1/product/sell`,
+        `${BACKEND_URL}/api/v1/product/sell`,
         {
           name: productName,
           description,
@@ -100,11 +119,11 @@ const Sell = () => {
       toast({
         title: res.data.message ?? "Product Successfully Added",
       });
-      naviagte('/')
+      navigate("/");
     } catch (error) {
       toast({
         title: error.response?.data?.message ?? error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -168,7 +187,10 @@ const Sell = () => {
               <Label htmlFor="category" className="text-gray-700 font-semibold">
                 Category
               </Label>
-              <Select onValueChange={(value) => setCategory(value)}>
+              <Select
+                value={category}
+                onValueChange={(value) => setCategory(value)}
+              >
                 <SelectTrigger className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
@@ -198,32 +220,31 @@ const Sell = () => {
                   className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              {image && (
-                <div className="mt-4">
+
+              {imageUrl && (
+                <div className="mt-4 relative">
                   <img
-                    src={URL.createObjectURL(image)}
-                    alt="Selected"
-                    className="w-full h-auto rounded-md"
+                    src={imageUrl}
+                    alt="Uploaded product"
+                    className="w-full h-64 object-contain rounded-md"
                   />
                   <Button
                     onClick={removeImage}
-                    className="mt-2 w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-md"
+                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full"
                   >
-                    Remove Image
+                    Remove
                   </Button>
                 </div>
               )}
             </div>
-
-            <div>
-              <Button
-                type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md"
-              >
-                Add Product
-              </Button>
-            </div>
           </div>
+
+          <Button
+            type="submit"
+            className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md"
+          >
+            Submit
+          </Button>
         </form>
       </div>
     </div>
