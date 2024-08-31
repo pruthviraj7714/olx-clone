@@ -120,7 +120,7 @@ export const ProductCard = ({ product }) => {
         <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
           <p className="flex items-center">
             <FaLocationArrow />
-            {product.user.location}
+            {product.user?.location}
           </p>
           <p className="flex items-center">
             <FaCalendarWeek />
