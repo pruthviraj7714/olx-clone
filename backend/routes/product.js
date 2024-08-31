@@ -2,58 +2,64 @@ import { Router } from "express";
 import { Product } from "../models/productModel.js";
 import { authMiddleware } from "../middleware.js";
 import { productSchema } from "../schema/schema.js";
-import multer from "multer";
 import { User } from "../models/userModel.js";
-import  cloudinary from "cloudinary"
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { config } from "dotenv";
+import mongoose from "mongoose";
+
+config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+const upload = multer();
 
 export const productRouter = Router();
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECERT,
-});
+productRouter.post(
+  "/upload",
+  authMiddleware,
+  upload.single("file"),
+  async (req, res) => {
+    try {
+      const file = req.file;
 
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-}).single("file");
+      if (!file) {
+        return res.status(400).json({
+          message: "File Not Found!",
+        });
+      }
 
-productRouter.post("/upload", (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ message: "File upload failed", error: err.message });
-    }
+      const buffer = file.buffer;
 
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-
-    cloudinary.uploader
-      .upload_stream(
-        {
-          folder: "uploads",
-          resource_type: "image",
-        },
-        (error, result) => {
-          if (error) {
-            return res
-              .status(500)
-              .json({
-                message: "Cloudinary upload failed",
-                error: error.message,
-              });
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "olx-clone-images",
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
           }
+        );
+        uploadStream.end(buffer);
+      });
 
-          res.status(200).json({ url: result.secure_url });
-        }
-      )
-      .end(req.file.buffer);
-  });
-});
+      return res.status(200).json({
+        result,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+        error: error.message || error,
+      });
+    }
+  }
+);
 
 productRouter.get("/all", async (req, res) => {
   try {
@@ -303,5 +309,21 @@ productRouter.post("/:id/purchase", authMiddleware, async (req, res) => {
       message: "Internal Server Error",
       error: error.message,
     });
+  }
+});
+
+productRouter.delete("/delete/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+    const product = await Product.findByIdAndDelete(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
