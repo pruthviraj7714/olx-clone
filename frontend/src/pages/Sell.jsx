@@ -64,7 +64,7 @@ const Sell = () => {
           },
         }
       );
-      return response.data.result.secure_url;
+      return response.data.result.url;
     } catch (error) {
       toast({
         title: "Image upload failed",
