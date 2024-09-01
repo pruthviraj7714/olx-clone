@@ -76,7 +76,7 @@ const Sell = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!productName || !description || !price || !category) {
       toast({
         title: "Please fill out all fields.",
@@ -84,12 +84,13 @@ const Sell = () => {
       });
       return;
     }
-
+  
     let uploadedImageUrl = imageUrl;
-    if (image && !uploadedImageUrl) {
+    if (image) {  // Always try to upload the image if one is selected
       try {
         uploadedImageUrl = await uploadImage(image);
         setImageUrl(uploadedImageUrl);
+        console.log(uploadedImageUrl);
       } catch (error) {
         toast({
           title: error.message,
@@ -98,7 +99,7 @@ const Sell = () => {
         return;
       }
     }
-
+  
     try {
       const res = await axios.post(
         `${BACKEND_URL}/api/v1/product/sell`,
@@ -115,7 +116,7 @@ const Sell = () => {
           },
         }
       );
-
+  
       toast({
         title: res.data.message ?? "Product Successfully Added",
       });
@@ -127,6 +128,7 @@ const Sell = () => {
       });
     }
   };
+  
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen ">
@@ -135,7 +137,7 @@ const Sell = () => {
       </h1>
       <div className="max-w-md w-full bg-white p-6 shadow-xl rounded-2xl">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Add Product</h2>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="grid gap-6">
             <div>
               <Label
@@ -240,7 +242,7 @@ const Sell = () => {
           </div>
 
           <Button
-            type="submit"
+            onClick={handleSubmit}
             className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md"
           >
             Submit
